@@ -1,0 +1,62 @@
+{
+	"name": "@mheob/changeset-changelog",
+	"version": "1.0.0",
+	"description": "My personal changeset changelog configuration.",
+	"keywords": [
+		"changelog",
+		"changeset",
+		"config"
+	],
+	"homepage": "https://github.com/mheob/changeset-changelog",
+	"bugs": "https://github.com/mheob/changeset-changelog/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mheob/changeset-changelog"
+	},
+	"license": "MIT",
+	"author": "Alexander Böhm <tools@boehm.work>",
+	"main": "src/index.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"format": "prettier --write \"**/*.{cjs,js,mjs,ts,json,md,mdx,yaml,yml}\"",
+		"lint": "eslint . --ext .cjs,.js,.mjs,.ts --fix --ignore-path .gitignore",
+		"prepare": "ts-node ./scripts/prepare.ts"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"lint-staged": {
+		"*.{cjs,js,mjs,ts}": "eslint --fix",
+		"!(pnpm-)*.{cjs,js,mjs,ts,json,md,mdx,yaml,yml}": "pnpm exec prettier --write",
+		"package.json": "pnpm dlx sort-package-json"
+	},
+	"dependencies": {
+		"@changesets/get-github-info": "^0.5.1",
+		"@changesets/types": "^5.2.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^17.1.2",
+		"@commitlint/config-conventional": "^17.1.0",
+		"@mheob/eslint-config": "^3.0.0",
+		"@mheob/prettier-config": "^2.0.2",
+		"@mheob/tsconfig": "^1.0.1",
+		"@types/node": "^18.11.0",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3",
+		"ts-node": "^10.9.1",
+		"tsup": "^6.2.3",
+		"typescript": "^4.8.4"
+	},
+	"tsup": {
+		"entry": [
+			"src/index.ts"
+		],
+		"clean": true
+	}
+}
