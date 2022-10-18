@@ -1,0 +1,9 @@
+# build
+dist
+
+# dependencies
+node_modules
+pnpm-lock.yaml
+
+# changelog
+CHANGELOG.md
