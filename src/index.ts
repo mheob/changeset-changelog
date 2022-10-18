@@ -12,7 +12,7 @@ import {
 	getUserLink,
 } from './utils';
 
-const getReleaseLine: GetReleaseLine = async (changeset, _type, options) => {
+export const getReleaseLine: GetReleaseLine = async (changeset, _type, options) => {
 	if (!options?.['repo']) throw new Error(errorMessage);
 
 	const { prFromSummary, replacedChangelog, usersFromSummary } = getReplacedChangelog(changeset);
@@ -20,14 +20,14 @@ const getReleaseLine: GetReleaseLine = async (changeset, _type, options) => {
 	const userLink = getUserLink(usersFromSummary, user);
 	const [firstLine, ...futureLines] = replacedChangelog.split('\n').map((line) => line.trimEnd());
 
-	const suffix = [pull ? ` [${pull}]` : '', userLink ? ` - Thanks ${userLink}!` : ''].join('');
+	const suffix = [pull ? `[${pull}]` : '', userLink ? ` - Thanks ${userLink}!` : ''].join('');
 	const suffixedMessage = suffix ? ` (${suffix})` : '';
 	const futureLinesMessage = futureLines.map((line) => `  ${line}`).join('\n');
 
 	return `\n- ${firstLine}${suffixedMessage}\n${futureLinesMessage}`;
 };
 
-const getDependencyReleaseLine: GetDependencyReleaseLine = async (
+export const getDependencyReleaseLine: GetDependencyReleaseLine = async (
 	changesets,
 	dependenciesUpdated,
 	options,
