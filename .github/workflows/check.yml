@@ -37,4 +37,9 @@ jobs:
         run: pnpm run lint
 
       - name: Test files
-        run: pnpm run test:run
+        run: pnpm run test:cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
