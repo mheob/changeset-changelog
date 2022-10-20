@@ -27,7 +27,8 @@
 		"test": "vitest",
 		"test:cov": "vitest run --coverage",
 		"test:run": "vitest run",
-		"test:ui": "vitest --ui"
+		"test:ui": "vitest --ui",
+		"version-packages": "changeset version && pnpm run format"
 	},
 	"commitlint": {
 		"extends": [

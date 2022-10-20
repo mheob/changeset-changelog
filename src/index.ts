@@ -46,8 +46,8 @@ export const getReleaseLine: GetReleaseLine = async (changeset, _type, options) 
 	const userLink = getUserLink(usersFromSummary, user);
 	const [firstLine, ...futureLines] = replacedChangelog.split('\n').map((line) => line.trimEnd());
 
-	const suffix = [pull ? `[${pull}]` : '', commit ?? '', userLink ?? ''].join(' ');
-	const suffixedMessage = suffix.trim() ? ` (${suffix})` : '';
+	const suffix = [pull ? `(${pull})` : '', commit ?? '', userLink ?? ''].join(' ');
+	const suffixedMessage = suffix.trim() ? ` --> ${suffix}` : '';
 	const futureLinesMessage = futureLines.map((line) => `  ${line}`).join('\n');
 
 	return `\n- ${firstLine}${suffixedMessage}\n${futureLinesMessage}`;
