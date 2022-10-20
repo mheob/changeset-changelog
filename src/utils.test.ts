@@ -79,15 +79,20 @@ describe('getReplacedChangelog', () => {
 
 describe('getGitHubLinks', () => {
 	it('should return the github links', async () => {
-		const result = await getGitHubLinks(data.repo, data.pull);
+		const changeset = getChangeset('', data.commit);
+		const result = await getGitHubLinks(data.repo, data.commit, changeset.commit, data.pull);
+		expect(result.commit).toBe(
+			'[`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8)',
+		);
 		expect(result.pull).toBe('[#2](https://github.com/mheob/changeset-changelog/pull/2)');
 		expect(result.user).toBe('[@mheob](https://github.com/mheob)');
 	});
 
 	it('should return the empty github links if no pr is given', async () => {
 		const result = await getGitHubLinks(data.repo);
-		expect(result.pull).toBe('');
-		expect(result.user).toBeNull();
+		expect(result.commit).toBeUndefined();
+		expect(result.pull).toBeUndefined();
+		expect(result.user).toBeUndefined();
 	});
 });
 
@@ -95,19 +100,19 @@ describe('getUserLink', () => {
 	it('should return the user links on no giving user', () => {
 		const userLink = '[@mheob](https://github.com/mheob)';
 		const result = getUserLink([], userLink);
-		expect(result).toBe(userLink);
+		expect(result).toBe(`by ${userLink}`);
 	});
 
 	it('should return the user links on one giving user', () => {
 		const userLink = '[@mheob](https://github.com/mheob)';
 		const result = getUserLink([data.user], `defect ${userLink}`);
-		expect(result).toBe(userLink);
+		expect(result).toBe(`by ${userLink}`);
 	});
 
 	it('should return the user links on multiple giving user', () => {
 		const userLink = '[@mheob](https://github.com/mheob), [@mheob](https://github.com/mheob)';
 		const result = getUserLink([data.user, data.user], `defect ${userLink}`);
-		expect(result).toBe(userLink);
+		expect(result).toBe(`by ${userLink}`);
 	});
 });
 

@@ -58,28 +58,6 @@ const getChangeset = (content: string, commit?: string): NewChangesetWithCommit 
 	};
 };
 
-describe('getReplacedChangelog', () => {
-	it('should throw an error if options.repo is missing', async () => {
-		const changeset = getChangeset('An awesome feature.', data.commit);
-		const result = getReleaseLine(changeset, 'minor', {});
-		await expect(result).rejects.toThrowError(errorMessage);
-	});
-
-	it('should return the changelog in a string format', async () => {
-		const changeset = getChangeset('An awesome feature.\npr: #2\nauthor: @mheob', data.commit);
-		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
-		expect(result).toBe(
-			'\n- An awesome feature. ([[#2](https://github.com/mheob/changeset-changelog/pull/2)] - Thanks [@mheob](https://github.com/mheob)!)\n',
-		);
-	});
-
-	it('should return the changelog in a string format but without meta data', async () => {
-		const changeset = getChangeset('An awesome feature.', data.commit);
-		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
-		expect(result).toBe('\n- An awesome feature.\n');
-	});
-});
-
 describe('getDependencyReleaseLine', () => {
 	it('should throw an error if options.repo is missing', async () => {
 		const changeset = getChangeset('An awesome feature.', data.commit);
@@ -116,5 +94,38 @@ describe('getDependencyReleaseLine', () => {
 		expect(result).toBe(
 			'- Internal dependencies updated [[`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8), [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8)]:\n  - pkg@1.1.0',
 		);
+	});
+});
+
+describe('getReplacedChangelog', () => {
+	it('should throw an error if options.repo is missing', async () => {
+		const changeset = getChangeset('An awesome feature.', data.commit);
+		const result = getReleaseLine(changeset, 'minor', {});
+		await expect(result).rejects.toThrowError(errorMessage);
+	});
+
+	it('should return the changelog in a string format', async () => {
+		const changeset = getChangeset(
+			'An awesome feature.\npr: #2\ncommit: 38f35f8\nauthor: @mheob',
+			data.commit,
+		);
+		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
+		expect(result).toBe(
+			'\n- An awesome feature. ([[#2](https://github.com/mheob/changeset-changelog/pull/2)] [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8) by [@mheob](https://github.com/mheob))\n',
+		);
+	});
+
+	it('should return the changelog in a string format but without meta data', async () => {
+		const changeset = getChangeset('An awesome feature.', data.commit);
+		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
+		expect(result).toBe(
+			'\n- An awesome feature. ([[#2](https://github.com/mheob/changeset-changelog/pull/2)] [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8) by [@mheob](https://github.com/mheob))\n',
+		);
+	});
+
+	it('should return the changelog in a string format but without meta data', async () => {
+		const changeset = getChangeset('An awesome feature.');
+		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
+		expect(result).toBe('\n- An awesome feature.\n');
 	});
 });
