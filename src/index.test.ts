@@ -111,7 +111,7 @@ describe('getReplacedChangelog', () => {
 		);
 		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
 		expect(result).toBe(
-			'\n- An awesome feature. ([[#2](https://github.com/mheob/changeset-changelog/pull/2)] [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8) by [@mheob](https://github.com/mheob))\n',
+			'\n- An awesome feature. --> ([#2](https://github.com/mheob/changeset-changelog/pull/2)) [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8) by [@mheob](https://github.com/mheob)\n',
 		);
 	});
 
@@ -119,7 +119,7 @@ describe('getReplacedChangelog', () => {
 		const changeset = getChangeset('An awesome feature.', data.commit);
 		const result = await getReleaseLine(changeset, 'minor', { repo: data.repo });
 		expect(result).toBe(
-			'\n- An awesome feature. ([[#2](https://github.com/mheob/changeset-changelog/pull/2)] [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8) by [@mheob](https://github.com/mheob))\n',
+			'\n- An awesome feature. --> ([#2](https://github.com/mheob/changeset-changelog/pull/2)) [`38f35f8`](https://github.com/mheob/changeset-changelog/commit/38f35f8) by [@mheob](https://github.com/mheob)\n',
 		);
 	});
 
