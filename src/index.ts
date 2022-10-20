@@ -48,9 +48,9 @@ export const getReleaseLine: GetReleaseLine = async (changeset, _type, options) 
 
 	const suffix = [pull ? `(${pull})` : '', commit ?? '', userLink ?? ''].join(' ');
 	const suffixedMessage = suffix.trim() ? ` --> ${suffix}` : '';
-	const futureLinesMessage = futureLines.map((line) => `  ${line}`).join('\n');
+	const futureLinesMessage = futureLines.map((line) => `  ${line}`).join(' ');
 
-	return `\n- ${firstLine}${suffixedMessage}\n${futureLinesMessage}`;
+	return `\n- ${firstLine}${suffixedMessage}${futureLinesMessage}\n`;
 };
 
 const changelogFunctions: ChangelogFunctions = {
