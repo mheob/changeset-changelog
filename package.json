@@ -15,7 +15,15 @@
 	},
 	"license": "MIT",
 	"author": "Alexander Böhm <tools@boehm.work>",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
 	"main": "dist/index.js",
+	"module": "dist/index.mjs",
 	"scripts": {
 		"build": "tsup",
 		"changeset": "changeset",
@@ -53,7 +61,7 @@
 		"@mheob/eslint-config": "^3.0.0",
 		"@mheob/prettier-config": "^2.0.2",
 		"@mheob/tsconfig": "^1.0.1",
-		"@types/node": "^18.11.0",
+		"@types/node": "^18.11.3",
 		"@vitest/coverage-istanbul": "^0.24.3",
 		"husky": "^8.0.1",
 		"lint-staged": "^13.0.3",
@@ -67,6 +75,10 @@
 		"clean": true,
 		"entry": [
 			"src/index.ts"
+		],
+		"format": [
+			"esm",
+			"cjs"
 		]
 	}
 }
