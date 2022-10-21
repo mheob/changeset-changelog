@@ -1,5 +1,15 @@
 # @mheob/changeset-changelog
 
+## 2.0.0
+
+### Major Changes
+
+- complete rewrite of the code and output --> ([#10](https://github.com/mheob/changeset-changelog/pull/10)) by [@mheob](https://github.com/mheob)
+
+### Patch Changes
+
+- cleanup repository --> ([#11](https://github.com/mheob/changeset-changelog/pull/11)) by [@mheob](https://github.com/mheob)
+
 ## 1.0.0
 
 ### Major Changes
