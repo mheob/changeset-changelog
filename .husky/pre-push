@@ -3,4 +3,4 @@
 
 [ -n "$CI" ] && exit 0
 
-pnpm dlx @mheob/check-package-manager
+npx use-correct-pm
