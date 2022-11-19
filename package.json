@@ -63,7 +63,7 @@
 		"@mheob/tsconfig": "^1.0.1",
 		"@types/node": "^18.11.9",
 		"@vitest/coverage-istanbul": "^0.25.2",
-		"eslint": "^8.27.0",
+		"eslint": "^8.28.0",
 		"husky": "^8.0.2",
 		"lint-staged": "^13.0.3",
 		"ts-node": "^10.9.1",
