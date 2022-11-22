@@ -7,7 +7,7 @@ specifiers:
   '@changesets/types': ^5.2.0
   '@commitlint/cli': ^17.2.0
   '@commitlint/config-conventional': ^17.2.0
-  '@mheob/eslint-config': ^3.0.1
+  '@mheob/eslint-config': ^3.1.0
   '@mheob/prettier-config': ^2.0.3
   '@mheob/tsconfig': ^1.0.1
   '@types/node': ^18.11.9
@@ -32,7 +32,7 @@ devDependencies:
   '@changesets/parse': 0.3.15
   '@commitlint/cli': 17.2.0
   '@commitlint/config-conventional': 17.2.0
-  '@mheob/eslint-config': 3.0.1_hsf322ms6xhhd4b5ne6lb74y4a
+  '@mheob/eslint-config': 3.1.0_hsf322ms6xhhd4b5ne6lb74y4a
   '@mheob/prettier-config': 2.0.3
   '@mheob/tsconfig': 1.0.1
   '@types/node': 18.11.9
@@ -828,10 +828,10 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@mheob/eslint-config/3.0.1_hsf322ms6xhhd4b5ne6lb74y4a:
-    resolution: {integrity: sha512-tO2/TQwEH/Bhf76k6CVXC/CYbVgMN4TkL51/ayH1LgHvl9ZNTMwERxyU3F87e3edjKQl+OhKVWS52Yh1DOfQNg==}
+  /@mheob/eslint-config/3.1.0_hsf322ms6xhhd4b5ne6lb74y4a:
+    resolution: {integrity: sha512-jhMdKHKAxoBjd6oj8DxVhWGn3Miq5+5OnsUezJhBhKWugnXSP60VFOz2+mP5CKxnCgO+mciQ3fzSq1+qvpeUzw==}
     peerDependencies:
-      eslint: ^8.26.0
+      eslint: ^8.27.0
       prettier: ^2.7.1
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.43.0_nqj4bdx4ekws7aecttskpih4py
