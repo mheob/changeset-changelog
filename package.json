@@ -58,7 +58,7 @@
 		"@changesets/parse": "^0.3.15",
 		"@commitlint/cli": "^17.2.0",
 		"@commitlint/config-conventional": "^17.2.0",
-		"@mheob/eslint-config": "^3.0.1",
+		"@mheob/eslint-config": "^3.1.0",
 		"@mheob/prettier-config": "^2.0.3",
 		"@mheob/tsconfig": "^1.0.1",
 		"@types/node": "^18.11.9",
