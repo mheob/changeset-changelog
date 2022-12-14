@@ -61,16 +61,16 @@
 		"@mheob/eslint-config": "^3.1.0",
 		"@mheob/prettier-config": "^2.0.3",
 		"@mheob/tsconfig": "^1.0.1",
-		"@types/node": "^18.11.11",
-		"@vitest/coverage-istanbul": "^0.25.4",
+		"@types/node": "^18.11.15",
+		"@vitest/coverage-istanbul": "^0.25.8",
 		"eslint": "^8.29.0",
 		"husky": "^8.0.2",
 		"lint-staged": "^13.1.0",
 		"ts-node": "^10.9.1",
 		"tsup": "^6.5.0",
-		"typescript": "^4.9.3",
-		"vite": "^3.2.5",
-		"vitest": "^0.25.4"
+		"typescript": "^4.9.4",
+		"vite": "^4.0.1",
+		"vitest": "^0.25.8"
 	},
 	"tsup": {
 		"clean": true,
