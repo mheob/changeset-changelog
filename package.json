@@ -59,7 +59,7 @@
 		"@commitlint/cli": "^17.3.0",
 		"@commitlint/config-conventional": "^17.3.0",
 		"@mheob/eslint-config": "^3.1.0",
-		"@mheob/prettier-config": "^2.0.3",
+		"@mheob/prettier-config": "^3.0.0",
 		"@mheob/tsconfig": "^1.0.1",
 		"@types/node": "^18.11.17",
 		"@vitest/coverage-istanbul": "^0.26.2",
