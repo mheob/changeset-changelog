@@ -1,5 +1,13 @@
 # @mheob/changeset-changelog
 
+## 2.0.1
+
+### Patch Changes
+
+- reduce the package size to a minium --> ([#23](https://github.com/mheob/changeset-changelog/pull/23)) by [@mheob](https://github.com/mheob)
+
+- chore(deps): update all non-major dependencies --> ([#17](https://github.com/mheob/changeset-changelog/pull/17)) by [@renovate](https://github.com/apps/renovate)
+
 ## 2.0.0
 
 ### Major Changes
