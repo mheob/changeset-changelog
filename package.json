@@ -24,6 +24,9 @@
 	},
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsup",
 		"changeset": "changeset",
