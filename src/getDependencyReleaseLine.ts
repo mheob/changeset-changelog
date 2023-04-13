@@ -3,10 +3,7 @@ import type { GetDependencyReleaseLine, NewChangesetWithCommit } from '@changese
 
 import { errorMessage } from './utils';
 
-async function getDependencyReleaseLinks(
-	changesets: NewChangesetWithCommit[],
-	repository: string,
-): Promise<string> {
+async function getDependencyReleaseLinks(changesets: NewChangesetWithCommit[], repository: string) {
 	const changesetLinks = await Promise.all(
 		changesets.map(async (cs) => {
 			// istanbul ignore next: because of our mocked get-github-info -- @preserve

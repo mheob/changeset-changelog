@@ -44,7 +44,7 @@ async function getGitHubLinks(
 	commit?: string,
 	commitFromSummary?: string,
 	prFromSummary?: number,
-): Promise<GithubLinks> {
+) {
 	let githubLinks: GithubLinks = { commit: undefined, pull: undefined, user: undefined };
 
 	if (prFromSummary) {
@@ -82,7 +82,7 @@ async function getGitHubLinks(
 	return githubLinks;
 }
 
-function getUserLink(usersFromSummary: string[], user?: string): string | undefined {
+function getUserLink(usersFromSummary: string[], user?: string) {
 	const userLink =
 		usersFromSummary.length > 0
 			? usersFromSummary
@@ -96,7 +96,7 @@ function getUserLink(usersFromSummary: string[], user?: string): string | undefi
 
 // add links to issue hints (fix #123) => (fix [#123](https://....))
 // thanks to https://github.com/svitejs/changesets-changelog-github-compact
-function linkifyIssue(line: string, repository: string): string {
+function linkifyIssue(line: string, repository: string) {
 	return line.replace(/(?<=\( ?(?:fix|fixes|resolves|see) )(#\d+)(?= ?\))/g, (issue) => {
 		return `[${issue}](https://github.com/${repository}/issues/${issue.slice(1)})`;
 	});
