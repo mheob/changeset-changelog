@@ -5,5 +5,6 @@ module.exports = {
 	...defaultConfig,
 	prompt: {
 		...defaultConfig.prompt,
+		allowEmptyScopes: true,
 	},
 };
