@@ -91,7 +91,7 @@ function getUserLink(usersFromSummary: string[], user?: string) {
 					.trim()
 			: user;
 
-	return userLink ? `by ${userLink}` : undefined;
+	return userLink ? `(${userLink})` : '';
 }
 
 // add links to issue hints (fix #123) => (fix [#123](https://....))
@@ -120,12 +120,11 @@ export const getReleaseLine: GetReleaseLine = async (changeset, _type, options) 
 
 	const prMessage = pull ? `(${pull})` : '';
 	const commitMessage = commit ? `(${commit})` : '';
-	const userLinkMessage = userLink ?? '';
 	// istanbul ignore next: because of our mocked get-github-info -- @preserve
-	const printPrOrCommit = pull !== '' ? prMessage : commitMessage;
-	const suffix = printPrOrCommit.trim() ? ` --> ${printPrOrCommit.trim()} ${userLinkMessage}` : '';
+	const printPrOrCommit = (pull !== '' ? prMessage : commitMessage).trim();
+	const prefix = printPrOrCommit ? `${printPrOrCommit} ${userLink}: ` : '';
 
 	const futureLinesMessage = futureLines.map((line) => `  ${line}`).join('\n');
 
-	return `\n\n- ${firstLine}${suffix}\n${futureLinesMessage}`;
+	return `\n\n- ${prefix}${firstLine}\n${futureLinesMessage}`;
 };
