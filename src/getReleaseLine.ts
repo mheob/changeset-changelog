@@ -118,8 +118,8 @@ export const getReleaseLine: GetReleaseLine = async (changeset, _type, options) 
 		.split('\n')
 		.map((line) => linkifyIssue(line.trimEnd(), options['repo']));
 
-	const prMessage = pull ? `(${pull})` : '';
-	const commitMessage = commit ? `(${commit})` : '';
+	const prMessage = pull ? `${pull}` : '';
+	const commitMessage = commit ? `${commit}` : '';
 	// istanbul ignore next: because of our mocked get-github-info -- @preserve
 	const printPrOrCommit = (pull !== '' ? prMessage : commitMessage).trim();
 	const prefix = printPrOrCommit ? `${printPrOrCommit} ${userLink}: ` : '';
