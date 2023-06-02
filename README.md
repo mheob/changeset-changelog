@@ -87,4 +87,4 @@ Add nice feature to the project (see #123)
 
 will outputted in the changelog like
 
-> Add nice Feature to the project, (see [#123](#)) --> ([#130](#)) by [@user](#)
+> [#130](#) ([@user](#)): Add nice Feature to the project, (see [#123](#))
