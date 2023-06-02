@@ -23,7 +23,7 @@ function getReplacedChangelog(changeset: NewChangesetWithCommit): {
 			if (!Number.isNaN(prNumber)) prFromSummary = prNumber;
 			return '';
 		})
-		.replace(/^\s*(?:author|user):\s*@?(\S+)/gim, (_, user) => {
+		.replaceAll(/^\s*(?:author|user):\s*@?(\S+)/gim, (_, user) => {
 			usersFromSummary.push(user);
 			return '';
 		})
@@ -97,7 +97,7 @@ function getUserLink(usersFromSummary: string[], user?: string) {
 // add links to issue hints (fix #123) => (fix [#123](https://....))
 // thanks to https://github.com/svitejs/changesets-changelog-github-compact
 function linkifyIssue(line: string, repository: string) {
-	return line.replace(/(?<=\( ?(?:fix|fixes|resolves|see) )(#\d+)(?= ?\))/g, (issue) => {
+	return line.replaceAll(/(?<=\( ?(?:fix|fixes|resolves|see) )(#\d+)(?= ?\))/g, (issue) => {
 		return `[${issue}](https://github.com/${repository}/issues/${issue.slice(1)})`;
 	});
 }
