@@ -63,7 +63,7 @@
 		"@vitest/coverage-istanbul": "^0.31.4",
 		"commitizen": "^4.3.0",
 		"cz-git": "^1.6.1",
-		"eslint": "^8.41.0",
+		"eslint": "^8.42.0",
 		"husky": "^8.0.3",
 		"lint-staged": "^13.2.2",
 		"ts-node": "^10.9.1",
