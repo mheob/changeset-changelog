@@ -42,8 +42,8 @@
 		"version-packages": "changeset version && pnpm run format"
 	},
 	"lint-staged": {
-		"*.{cjs,js,mjs,ts}": "eslint --fix",
 		"!(pnpm-)*.{cjs,js,mjs,ts,json,md,mdx,yaml,yml}": "pnpm exec prettier --write",
+		"*.{cjs,js,mjs,ts}": "eslint --fix",
 		"package.json": "pnpm dlx sort-package-json"
 	},
 	"dependencies": {
@@ -54,23 +54,23 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.26.2",
 		"@changesets/parse": "^0.3.16",
-		"@commitlint/cli": "^17.7.1",
+		"@commitlint/cli": "^17.7.2",
 		"@mheob/commitlint-config": "^1.1.0",
 		"@mheob/eslint-config": "^5.1.0",
 		"@mheob/prettier-config": "^3.1.0",
 		"@mheob/tsconfig": "^2.0.0",
-		"@types/node": "^18.18.0",
-		"@vitest/coverage-istanbul": "^0.34.5",
+		"@types/node": "^20.7.2",
+		"@vitest/coverage-istanbul": "^0.34.6",
 		"commitizen": "^4.3.0",
 		"cz-git": "^1.7.1",
 		"eslint": "^8.50.0",
 		"husky": "^8.0.3",
-		"lint-staged": "^13.3.0",
+		"lint-staged": "^14.0.1",
 		"ts-node": "^10.9.1",
-		"tsup": "^6.7.0",
+		"tsup": "^7.2.0",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
-		"vitest": "^0.34.5"
+		"vitest": "^0.34.6"
 	},
 	"tsup": {
 		"clean": true,
