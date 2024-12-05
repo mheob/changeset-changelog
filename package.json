@@ -60,7 +60,7 @@
 		"@mheob/prettier-config": "^3.2.0",
 		"@mheob/tsconfig": "^2.0.0",
 		"@types/node": "^20.11.16",
-		"@vitest/coverage-istanbul": "^1.2.2",
+		"@vitest/coverage-istanbul": "^2.1.8",
 		"commitizen": "^4.3.0",
 		"cz-git": "^1.8.0",
 		"eslint": "^8.56.0",
@@ -70,7 +70,7 @@
 		"tsup": "^8.0.1",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.12",
-		"vitest": "^1.2.2"
+		"vitest": "^2.1.8"
 	},
 	"tsup": {
 		"clean": true,
