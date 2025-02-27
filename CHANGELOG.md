@@ -1,5 +1,12 @@
 # @mheob/changeset-changelog
 
+## 3.0.2
+
+### Patch Changes
+
+- [#53](https://github.com/mheob/changeset-changelog/pull/53) ([@renovate](https://github.com/apps/renovate)): chore(deps): update
+  all non-major dependencies
+
 ## 3.0.1
 
 ### Patch Changes
