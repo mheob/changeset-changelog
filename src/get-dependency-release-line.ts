@@ -3,12 +3,15 @@ import type { GetDependencyReleaseLine, NewChangesetWithCommit } from '@changese
 
 import { errorMessage } from './utils';
 
-async function getDependencyReleaseLinks(changesets: NewChangesetWithCommit[], repository: string) {
+export async function getDependencyReleaseLinks(
+	changesets: NewChangesetWithCommit[],
+	repository: string,
+): Promise<string> {
 	const changesetLinks = await Promise.all(
-		changesets.map(async (cs) => {
+		changesets.map(async cs => {
 			// istanbul ignore next: because of our mocked get-github-info -- @preserve
 			if (!cs.commit) return;
-			const { links } = await getInfo({ repo: repository, commit: cs.commit });
+			const { links } = await getInfo({ commit: cs.commit, repo: repository });
 			return links.commit;
 		}),
 	);
@@ -21,13 +24,13 @@ export const getDependencyReleaseLine: GetDependencyReleaseLine = async (
 	dependenciesUpdated,
 	options,
 ) => {
-	if (!options?.['repo']) throw new Error(errorMessage);
+	if (!options?.repo) throw new Error(errorMessage);
 	if (dependenciesUpdated.length === 0) return '';
 
-	const links = await getDependencyReleaseLinks(changesets, options['repo']);
+	const links = await getDependencyReleaseLinks(changesets, options.repo);
 	const headerMessage = `- Internal dependencies updated [${links}]:`;
 	const updatedDependenciesList = dependenciesUpdated.map(
-		(dependency) => `  - ${dependency.name}@${dependency.newVersion}`,
+		dependency => `  - ${dependency.name}@${dependency.newVersion}`,
 	);
 
 	return [headerMessage, ...updatedDependenciesList].join('\n');

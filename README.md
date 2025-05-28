@@ -34,7 +34,9 @@ pnpm add -D @mheob/changeset-changelog
 Set in your `.changeset/config.json` file the following snippet:
 
 ```jsonc
-"changelog": ["@mheob/changeset-changelog", { "repo": "YOUR_ORG_OR_USER/YOUR_REPO" }]
+{
+	"changelog": ["@mheob/changeset-changelog", { "repo": "YOUR_ORG_OR_USER/YOUR_REPO" }],
+}
 ```
 
 ### Output

@@ -1,7 +1,7 @@
-const defaultConfig = require('@mheob/commitlint-config');
+import defaultConfig from '@mheob/commitlint-config';
 
 /** @type {import('cz-git').UserConfig} */
-module.exports = {
+export default {
 	...defaultConfig,
 	prompt: {
 		...defaultConfig.prompt,

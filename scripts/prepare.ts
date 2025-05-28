@@ -1,7 +1,9 @@
-import { install as installHusky } from 'husky';
+import process from 'node:process';
 
-const isCI = process.env['CI'] !== undefined;
+import installHusky from 'husky';
+
+const isCI = process.env.CI !== undefined;
 
 if (!isCI) {
-	installHusky();
+	console.log(installHusky());
 }

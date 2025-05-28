@@ -1,6 +1,0 @@
-# build
-dist
-
-# dependencies
-node_modules
-pnpm-lock.yaml
