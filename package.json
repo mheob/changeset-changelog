@@ -38,10 +38,9 @@
 		"test:cov": "vitest run --coverage",
 		"test:run": "vitest run",
 		"test:ui": "vitest --ui",
-		"version-packages": "changeset version && pnpm run format"
+		"version-packages": "changeset version && pnpm run lint"
 	},
 	"lint-staged": {
-		"!(pnpm-)*.{cjs,js,mjs,ts,json,md,mdx,yaml,yml}": "pnpm exec prettier --write",
 		"*.{cjs,js,mjs,ts}": "eslint --fix",
 		"package.json": "pnpm dlx sort-package-json"
 	},
@@ -74,7 +73,7 @@
 	},
 	"packageManager": "pnpm@10.11.0",
 	"engines": {
-		"node": ">=22"
+		"node": "^22.16.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
