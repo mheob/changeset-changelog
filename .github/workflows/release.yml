@@ -5,7 +5,7 @@ on:
     paths:
       - ".changeset/**"
       - "src/**"
-      - "package.json"
+      - package.json
     branches:
       - main
 
@@ -23,14 +23,12 @@ jobs:
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
-        with:
-          version: latest
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+          node-version-file: .nvmrc
+          cache: pnpm
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile

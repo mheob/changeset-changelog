@@ -28,12 +28,11 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "tsup",
+		"build": "tsdown",
 		"changeset": "changeset",
-		"dev": "tsup --watch",
-		"format": "prettier --write \"**/*.{cjs,js,mjs,ts,json,md,mdx,yaml,yml}\"",
-		"lint": "eslint . --ext .cjs,.js,.mjs,.ts --fix --ignore-path .gitignore",
-		"prepare": "ts-node ./scripts/prepare.ts",
+		"dev": "tsdown --watch",
+		"lint": "eslint . --fix",
+		"prepare": "tsx ./scripts/prepare.ts",
 		"release": "changeset publish",
 		"test": "vitest",
 		"test:cov": "vitest run --coverage",
@@ -48,31 +47,42 @@
 	},
 	"dependencies": {
 		"@changesets/get-github-info": "^0.6.0",
-		"@changesets/types": "^6.0.0",
-		"dotenv": "^16.4.1"
+		"@changesets/types": "^6.1.0",
+		"dotenv": "^16.5.0"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.27.1",
-		"@changesets/parse": "^0.4.0",
-		"@commitlint/cli": "^19.0.0",
-		"@mheob/commitlint-config": "^1.1.1",
-		"@mheob/eslint-config": "^5.2.0",
-		"@mheob/prettier-config": "^3.2.0",
-		"@mheob/tsconfig": "^2.0.0",
-		"@types/node": "^20.11.16",
-		"@vitest/coverage-istanbul": "^1.2.2",
-		"commitizen": "^4.3.0",
-		"cz-git": "^1.8.0",
-		"eslint": "^8.56.0",
-		"husky": "^8.0.3",
-		"lint-staged": "^15.2.2",
-		"ts-node": "^10.9.2",
-		"tsup": "^8.0.1",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.12",
-		"vitest": "^1.2.2"
+		"@changesets/cli": "^2.29.4",
+		"@changesets/parse": "^0.4.1",
+		"@commitlint/cli": "^19.8.1",
+		"@mheob/commitlint-config": "^1.2.2",
+		"@mheob/eslint-config": "^8.8.3",
+		"@mheob/prettier-config": "^3.3.3",
+		"@mheob/tsconfig": "^2.2.1",
+		"@types/node": "^22.15.23",
+		"@vitest/coverage-v8": "^3.1.4",
+		"commitizen": "^4.3.1",
+		"cz-git": "^1.11.1",
+		"eslint": "^9.27.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.1.0",
+		"prettier": "^3.5.3",
+		"tsdown": "^0.12.4",
+		"tsx": "^4.19.4",
+		"typescript": "^5.8.3",
+		"vite": "^6.3.5",
+		"vitest": "^3.1.4"
 	},
-	"tsup": {
+	"packageManager": "pnpm@10.11.0",
+	"engines": {
+		"node": ">=22"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild",
+			"unrs-resolver"
+		]
+	},
+	"tsdown": {
 		"clean": true,
 		"entry": [
 			"src/index.ts"

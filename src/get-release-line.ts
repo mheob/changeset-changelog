@@ -1,9 +1,10 @@
+/* eslint-disable dot-notation */
 import { getInfo, getInfoFromPullRequest } from '@changesets/get-github-info';
 import type { GetReleaseLine, NewChangesetWithCommit } from '@changesets/types';
 
 import { errorMessage } from './utils';
 
-function getReplacedChangelog(changeset: NewChangesetWithCommit): {
+export function getReplacedChangelog(changeset: NewChangesetWithCommit): {
 	commitFromSummary: string | undefined;
 	prFromSummary: number | undefined;
 	replacedChangelog: string;
@@ -20,7 +21,7 @@ function getReplacedChangelog(changeset: NewChangesetWithCommit): {
 		})
 		.replace(/^\s*(?:pr|pull|pull\s+request):\s*#?(\d+)/im, (_, pr) => {
 			const prNumber = Number(pr);
-			if (!Number.isNaN(prNumber)) prFromSummary = prNumber;
+			prFromSummary = prNumber;
 			return '';
 		})
 		.replaceAll(/^\s*(?:author|user):\s*@?(\S+)/gim, (_, user) => {
@@ -38,13 +39,18 @@ function getReplacedChangelog(changeset: NewChangesetWithCommit): {
 }
 
 type MaybeString = string | undefined;
-type GithubLinks = { commit: MaybeString; pull: MaybeString; user: MaybeString };
-async function getGitHubLinks(
+interface GithubLinks {
+	commit: MaybeString;
+	pull: MaybeString;
+	user: MaybeString;
+}
+
+export async function getGitHubLinks(
 	repository: string,
 	commit?: string,
 	commitFromSummary?: string,
 	prFromSummary?: number,
-) {
+): Promise<GithubLinks> {
 	let githubLinks: GithubLinks = { commit: undefined, pull: undefined, user: undefined };
 
 	if (prFromSummary) {
@@ -52,7 +58,7 @@ async function getGitHubLinks(
 		githubLinks = {
 			...githubLinks,
 			pull: links.pull,
-			// istanbul ignore next: because of our mocked get-github-info -- @preserve
+			/* v8 ignore next: because of our mocked get-github-info -- @preserve */
 			user: links.user ?? undefined,
 		};
 
@@ -66,10 +72,10 @@ async function getGitHubLinks(
 		return githubLinks;
 	}
 
-	const commitToFetchFrom = commitFromSummary || commit;
+	const commitToFetchFrom = commitFromSummary || commit; // NOSONAR - `||` is correct here
 
 	if (commitToFetchFrom) {
-		const { links } = await getInfo({ repo: repository, commit: commitToFetchFrom });
+		const { links } = await getInfo({ commit: commitToFetchFrom, repo: repository });
 		return {
 			commit: links.commit,
 			// istanbul ignore next: because of our mocked get-github-info -- @preserve
@@ -82,11 +88,11 @@ async function getGitHubLinks(
 	return githubLinks;
 }
 
-function getUserLink(usersFromSummary: string[], user?: string) {
+export function getUserLink(usersFromSummary: string[], user?: string): string {
 	const userLink =
 		usersFromSummary.length > 0
 			? usersFromSummary
-					.map((userFromSummary) => `[@${userFromSummary}](https://github.com/${userFromSummary})`)
+					.map(userFromSummary => `[@${userFromSummary}](https://github.com/${userFromSummary})`)
 					.join(', ')
 					.trim()
 			: user;
@@ -96,8 +102,8 @@ function getUserLink(usersFromSummary: string[], user?: string) {
 
 // add links to issue hints (fix #123) => (fix [#123](https://....))
 // thanks to https://github.com/svitejs/changesets-changelog-github-compact
-function linkifyIssue(line: string, repository: string) {
-	return line.replaceAll(/(?<=\( ?(?:fix|fixes|resolves|see) )(#\d+)(?= ?\))/g, (issue) => {
+export function linkifyIssue(line: string, repository: string): string {
+	return line.replaceAll(/(?<=\( ?(?:fix|fixes|resolves|see) )(#\d+)(?= ?\))/g, issue => {
 		return `[${issue}](https://github.com/${repository}/issues/${issue.slice(1)})`;
 	});
 }
@@ -116,15 +122,14 @@ export const getReleaseLine: GetReleaseLine = async (changeset, _type, options) 
 	const userLink = getUserLink(usersFromSummary, user);
 	const [firstLine, ...futureLines] = replacedChangelog
 		.split('\n')
-		.map((line) => linkifyIssue(line.trimEnd(), options['repo']));
+		.map(line => linkifyIssue(line.trimEnd(), options['repo']));
 
 	const prMessage = pull ? `${pull}` : '';
 	const commitMessage = commit ? `${commit}` : '';
-	// istanbul ignore next: because of our mocked get-github-info -- @preserve
-	const printPrOrCommit = (pull !== '' ? prMessage : commitMessage).trim();
-	const prefix = printPrOrCommit ? `${printPrOrCommit} ${userLink}: ` : '';
+	const printPrOrCommit = (pull ? prMessage : commitMessage).trim();
+	const prefix = `${printPrOrCommit} ${userLink}: `;
 
-	const futureLinesMessage = futureLines.map((line) => `  ${line}`).join('\n');
+	const futureLinesMessage = futureLines.map(line => `  ${line}`).join('\n');
 
 	return `\n\n- ${prefix}${firstLine}\n${futureLinesMessage}`;
 };
