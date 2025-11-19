@@ -52,7 +52,7 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.29.4",
 		"@changesets/parse": "^0.4.1",
-		"@commitlint/cli": "^19.8.1",
+		"@commitlint/cli": "^20.1.0",
 		"@mheob/commitlint-config": "^1.2.2",
 		"@mheob/eslint-config": "^8.8.3",
 		"@mheob/prettier-config": "^3.3.3",
