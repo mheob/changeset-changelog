@@ -22,7 +22,7 @@ jobs:
           token: ${{ secrets.MACHINE_USER_TOKEN }}
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
         uses: actions/setup-node@v6
