@@ -57,7 +57,7 @@
 		"@mheob/eslint-config": "^8.14.5",
 		"@mheob/prettier-config": "^3.5.0",
 		"@mheob/tsconfig": "^2.2.1",
-		"@types/node": "^24.19.0",
+		"@types/node": "^24.19.1",
 		"@vitest/coverage-v8": "^3.2.7",
 		"commitizen": "^4.3.2",
 		"cz-git": "^1.14.0",
