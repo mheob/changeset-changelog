@@ -53,7 +53,7 @@
 		"@changesets/cli": "^2.31.1",
 		"@changesets/parse": "^0.4.3",
 		"@commitlint/cli": "^19.8.1",
-		"@mheob/commitlint-config": "^1.2.5",
+		"@mheob/commitlint-config": "^2.0.8",
 		"@mheob/eslint-config": "^8.14.5",
 		"@mheob/prettier-config": "^3.5.0",
 		"@mheob/tsconfig": "^2.2.1",
