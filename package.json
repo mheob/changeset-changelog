@@ -69,7 +69,7 @@
 		"tsx": "^4.23.15",
 		"typescript": "^5.9.3",
 		"vite": "^6.4.3",
-		"vitest": "^3.1.4"
+		"vitest": "^4.0.0"
 	},
 	"packageManager": "pnpm@10.34.6",
 	"engines": {
