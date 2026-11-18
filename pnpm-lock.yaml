@@ -37,8 +37,8 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0(prettier@3.9.9)
       '@mheob/tsconfig':
-        specifier: ^2.2.1
-        version: 2.2.1
+        specifier: ^3.0.2
+        version: 3.0.2
       '@types/node':
         specifier: ^24.19.0
         version: 24.19.0
@@ -837,8 +837,8 @@ packages:
     peerDependencies:
       prettier: ^3.7.4
 
-  '@mheob/tsconfig@2.2.1':
-    resolution: {integrity: sha512-rMcEcDUjD2/D1gmtaT83z+BzMBjh+J2HLwOA92ugM9gjyXJkvjnzTaUN67poK82iyrNh/h9hJGbqU8IkkeZUgQ==}
+  '@mheob/tsconfig@3.0.2':
+    resolution: {integrity: sha512-5gTzW+6Ua7441jSp8KKVxWuLim8djwBvWxWWkBO0G2xvT+cuh/GjGGv4T4SULIaSxHR8iPIS3zfbO7gYBTHzwg==}
 
   '@napi-rs/wasm-runtime@0.2.10':
     resolution: {integrity: sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ==}
@@ -5121,7 +5121,7 @@ snapshots:
       prettier: 3.9.9
       prettier-plugin-toml: 2.0.6(prettier@3.9.9)
 
-  '@mheob/tsconfig@2.2.1': {}
+  '@mheob/tsconfig@3.0.2': {}
 
   '@napi-rs/wasm-runtime@0.2.10':
     dependencies:
