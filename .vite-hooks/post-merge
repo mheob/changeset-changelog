@@ -1,0 +1,4 @@
+# Installs the dependencies again when a merge or pull changed the lockfile.
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -q '^pnpm-lock.yaml$'; then
+	vp install
+fi

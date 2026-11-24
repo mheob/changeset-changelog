@@ -4,36 +4,79 @@ on:
   pull_request:
   push:
 
+# Read-only token for every job; no job needs more.
+permissions:
+  contents: read
+
+# A newer push supersedes a running check of the same branch or pull request; on main every
+# commit keeps its own run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  # `vp install` runs `prepare` (`vp config`); CI needs no Git hooks.
+  VP_GIT_HOOKS: "0"
+
+# Every action is pinned to the commit of its release (Renovate and Dependabot update the pins).
+# setup-vp installs Vite+, Node and pnpm from `packageManager`, restores the dependency cache and
+# installs with the lockfile as it is.
 jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v7
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v6
-
-      - name: Setup Node
-        uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
+          persist-credentials: false
+      - uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
+        with:
+          node-version-file: .node-version
+          cache: true
+          run-install: |
+            - args: ['--frozen-lockfile']
+      - name: Format, lint and types
+        run: vp check
+      - name: Catalog versions
+        run: pnpm check:catalog
+      - name: Vite+ toolchain versions
+        run: pnpm check:vite-plus
+      - name: Build
+        run: vp pack
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build files
-        run: pnpm run build
-
-      - name: Lint files
-        run: pnpm run lint
-
-      - name: Test files
-        run: pnpm run test:cov
-
+  # The development version (.node-version) and the oldest version `engines.node` allows.
+  test:
+    name: Test (Node.js ${{ matrix.node-version || 'from .node-version' }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["", "24.21.0"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # An empty `node-version` falls back to `node-version-file`.
+      - uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          node-version-file: .node-version
+          cache: true
+          run-install: |
+            - args: ['--frozen-lockfile']
+      # The explicit version overrides .node-version; fail instead of testing the wrong one.
+      - name: Check the Node.js version
+        if: matrix.node-version != ''
+        env:
+          EXPECTED: v${{ matrix.node-version }}
+        run: test "$(node --version)" = "$EXPECTED"
+      - name: Tests with coverage
+        run: vp test run --coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v7.1.1
+        if: matrix.node-version == ''
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
+          files: coverage/lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}

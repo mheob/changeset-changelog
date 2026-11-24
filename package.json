@@ -9,86 +9,59 @@
 	],
 	"homepage": "https://github.com/mheob/changeset-changelog",
 	"bugs": "https://github.com/mheob/changeset-changelog/issues",
+	"license": "MIT",
+	"author": "Alexander Böhm <tools@boehm.work>",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/mheob/changeset-changelog"
 	},
-	"license": "MIT",
-	"author": "Alexander Böhm <tools@boehm.work>",
-	"exports": {
-		".": {
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.js"
-		},
-		"./package.json": "./package.json"
-	},
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
 	"files": [
 		"dist"
 	],
-	"scripts": {
-		"build": "tsdown",
-		"changeset": "changeset",
-		"dev": "tsdown --watch",
-		"lint": "eslint . --fix",
-		"prepare": "tsx ./scripts/prepare.ts",
-		"release": "changeset publish",
-		"test": "vitest",
-		"test:cov": "vitest run --coverage",
-		"test:run": "vitest run",
-		"test:ui": "vitest --ui",
-		"version-packages": "changeset version && pnpm run lint"
+	"type": "module",
+	"main": "dist/index.cjs",
+	"module": "dist/index.mjs",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		},
+		"./package.json": "./package.json"
 	},
-	"lint-staged": {
-		"*.{cjs,js,mjs,ts}": "eslint --fix",
-		"package.json": "pnpm dlx sort-package-json"
+	"scripts": {
+		"build": "vp pack",
+		"changeset": "changeset",
+		"check": "vp check",
+		"check:catalog": "node scripts/check-catalog.ts",
+		"check:vite-plus": "node scripts/check-vite-plus-versions.ts",
+		"commit": "czg",
+		"dev": "vp pack --watch",
+		"prepare": "vp config",
+		"release": "changeset publish",
+		"test": "vp test",
+		"version-packages": "changeset version && vp fmt package.json"
 	},
 	"dependencies": {
-		"@changesets/get-github-info": "^0.8.0",
-		"@changesets/types": "^6.1.0",
-		"dotenv": "^17.4.2"
+		"@changesets/get-github-info": "catalog:",
+		"@changesets/types": "catalog:"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^3.0.3",
-		"@changesets/parse": "^0.4.3",
-		"@commitlint/cli": "^21.2.4",
-		"@mheob/commitlint-config": "^1.2.5",
-		"@mheob/eslint-config": "^8.14.5",
-		"@mheob/prettier-config": "^3.5.0",
-		"@mheob/tsconfig": "^2.2.1",
-		"@types/node": "^24.19.0",
-		"@vitest/coverage-v8": "^3.2.7",
-		"commitizen": "^4.3.2",
-		"cz-git": "^1.14.0",
-		"eslint": "^9.39.5",
-		"husky": "^9.1.7",
-		"lint-staged": "^16.4.0",
-		"prettier": "^3.9.9",
-		"tsdown": "^0.23.0",
-		"tsx": "^4.23.15",
-		"typescript": "^5.9.3",
-		"vite": "^6.4.3",
-		"vitest": "^3.1.4"
+		"@changesets/cli": "catalog:",
+		"@commitlint/cli": "catalog:",
+		"@mheob/commitlint-config": "catalog:",
+		"@mheob/oxfmt-config": "catalog:",
+		"@mheob/oxlint-config": "catalog:",
+		"@types/node": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"czg": "catalog:",
+		"eslint-plugin-regexp": "catalog:",
+		"oxfmt": "catalog:",
+		"oxlint": "catalog:",
+		"typescript": "catalog:",
+		"vite-plus": "catalog:"
 	},
-	"packageManager": "pnpm@10.34.6",
 	"engines": {
-		"node": "^24.21.0"
+		"node": ">=24.21.0"
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"esbuild",
-			"unrs-resolver"
-		]
-	},
-	"tsdown": {
-		"clean": true,
-		"entry": [
-			"src/index.ts"
-		],
-		"format": [
-			"esm",
-			"cjs"
-		]
-	}
+	"packageManager": "pnpm@12.23.0"
 }

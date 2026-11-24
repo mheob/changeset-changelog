@@ -9,41 +9,76 @@ on:
     branches:
       - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+# Read-only GITHUB_TOKEN: every write (the release pull request, the tags and the GitHub Releases)
+# uses the token of the release app below. npm publishing needs no token: see `id-token` below.
+permissions:
+  contents: read
+  # npm trusted publishing: `pnpm publish` exchanges the job's OIDC token for a short-lived publish
+  # token of this package (configured on npmjs.com for this repository and `release.yml`) and
+  # attaches a provenance attestation.
+  id-token: write
 
+# Releases of one ref run one after the other, never in parallel and never cancelled midway.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # `vp install` runs `prepare` (`vp config`); CI needs no Git hooks.
+  VP_GIT_HOOKS: "0"
+
+# Every action is pinned to the commit of its release (Renovate and Dependabot update the pins).
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v7
+      # An installation token of the release GitHub App (not GITHUB_TOKEN), so the pull request
+      # the action opens triggers CI. It is limited to what the release needs and is revoked when
+      # the job ends.
+      - name: Create the token of the release app
+        id: app-token
+        uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
         with:
-          token: ${{ secrets.MACHINE_USER_TOKEN }}
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v6
-
-      - name: Setup Node
-        uses: actions/setup-node@v7
+          client-id: ${{ vars.BOT_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build files
-        run: pnpm run build
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v2
+          token: ${{ steps.app-token.outputs.token }}
+      # No `registry-url`: its .npmrc would send a placeholder token instead of using trusted
+      # publishing.
+      - uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
         with:
-          commit: "chore(release): bump version and deploy"
-          title: "chore(release): bump version and deploy"
-          publish: pnpm run release
-          version: pnpm run version-packages
+          node-version-file: .node-version
+          cache: true
+          run-install: |
+            - args: ['--frozen-lockfile']
+      # `changeset publish` creates annotated tags (`git tag -m`), which need a Git identity: the
+      # app's bot user.
+      - name: Set the Git identity of the release app
         env:
-          GITHUB_TOKEN: ${{ secrets.MACHINE_USER_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          user_id="$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)"
+          git config --local user.name "${APP_SLUG}[bot]"
+          git config --local user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
+      - name: Build
+        run: vp pack
+      # With changesets it opens or updates the release pull request (`pnpm run version-packages`);
+      # without, it publishes the new version to npm (`pnpm run release`).
+      - name: Create the release pull request or publish to npm
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          commit-message: "chore(release): bump version and deploy"
+          github-token: ${{ steps.app-token.outputs.token }}
+          pr-title: "chore(release): bump version and deploy"
+          publish-script: pnpm run release
+          version-script: pnpm run version-packages
+        env:
+          # The action only uses the `github-token` input; the changelog generator
+          # (@changesets/get-github-info) reads this one.
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}

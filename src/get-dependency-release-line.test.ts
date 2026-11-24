@@ -1,66 +1,85 @@
-/* eslint-disable ts/no-explicit-any */
-import { getInfo } from '@changesets/get-github-info';
+import { getCommitInfo } from '@changesets/get-github-info';
+import type { CommitInfo } from '@changesets/get-github-info';
 import type { ModCompWithPackage, NewChangesetWithCommit } from '@changesets/types';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vite-plus/test';
 
 import { getDependencyReleaseLine, getDependencyReleaseLinks } from './get-dependency-release-line';
 
-vi.mock('@changesets/get-github-info', () => ({
-	getInfo: vi.fn(),
+vi.mock(import('@changesets/get-github-info'), () => ({
+	getCommitInfo: vi.fn(),
 }));
 
-describe('getDependencyReleaseLinks', () => {
+function commitInfo(sha: string): CommitInfo {
+	const url = `https://github.com/org/repo/commit/${sha}`;
+	return { commit: { markdownLink: url, sha, url } };
+}
+
+describe(getDependencyReleaseLinks, () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
 	it('should return commit links for each changeset', async () => {
-		(getInfo as any).mockImplementation(({ commit }: { commit: string }) => ({
-			links: { commit: `https://github.com/org/repo/commit/${commit}` },
-		}));
+		vi.mocked(getCommitInfo)
+			.mockResolvedValueOnce(commitInfo('abc123'))
+			.mockResolvedValueOnce(commitInfo('def456'));
 		const changesets: NewChangesetWithCommit[] = [
 			{ commit: 'abc123', id: 'cs1', releases: [], summary: '' },
 			{ commit: 'def456', id: 'cs2', releases: [], summary: '' },
 		];
-		const repo = 'org/repo';
-		const result = await getDependencyReleaseLinks(changesets, repo);
+		const result = await getDependencyReleaseLinks(changesets, 'org/repo');
+
 		expect(result).toBe(
 			'https://github.com/org/repo/commit/abc123, https://github.com/org/repo/commit/def456',
 		);
 	});
 
 	it('should skip changesets without commit', async () => {
-		(getInfo as any).mockImplementation(({ commit }: { commit: string }) => ({
-			links: { commit: `https://github.com/org/repo/commit/${commit}` },
-		}));
+		vi.mocked(getCommitInfo).mockResolvedValueOnce(commitInfo('def456'));
 		const changesets: NewChangesetWithCommit[] = [
 			{ id: 'cs1', releases: [], summary: '' },
+			{ commit: '', id: 'cs2', releases: [], summary: '' },
+			{ commit: 'def456', id: 'cs3', releases: [], summary: '' },
+		];
+		const result = await getDependencyReleaseLinks(changesets, 'org/repo');
+
+		expect(result).toBe('https://github.com/org/repo/commit/def456');
+		expect(getCommitInfo).toHaveBeenCalledExactlyOnceWith({ commit: 'def456', repo: 'org/repo' });
+	});
+
+	it('should skip commits GitHub does not know', async () => {
+		vi.mocked(getCommitInfo)
+			.mockResolvedValueOnce(undefined)
+			.mockResolvedValueOnce(commitInfo('def456'));
+		const changesets: NewChangesetWithCommit[] = [
+			{ commit: 'abc123', id: 'cs1', releases: [], summary: '' },
 			{ commit: 'def456', id: 'cs2', releases: [], summary: '' },
 		];
-		const repo = 'org/repo';
-		const result = await getDependencyReleaseLinks(changesets, repo);
+		const result = await getDependencyReleaseLinks(changesets, 'org/repo');
+
 		expect(result).toBe('https://github.com/org/repo/commit/def456');
 	});
 });
 
-describe('getDependencyReleaseLine', () => {
+describe(getDependencyReleaseLine, () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
 	it('should throw if options.repo is missing', async () => {
-		await expect(getDependencyReleaseLine([], [], {})).rejects.toThrow();
+		await expect(getDependencyReleaseLine([], [], {})).rejects.toThrow(
+			'Please provide a repo to this changelog generator',
+		);
 	});
 
 	it('should return empty string if no dependencies updated', async () => {
 		const result = await getDependencyReleaseLine([], [], { repo: 'org/repo' });
+
 		expect(result).toBe('');
 	});
 
 	it('should return formatted release line with links and dependencies', async () => {
-		(getInfo as any).mockImplementation(({ commit }: { commit: string }) => ({
-			links: { commit: `https://github.com/org/repo/commit/${commit}` },
-		}));
+		vi.mocked(getCommitInfo).mockResolvedValueOnce(commitInfo('abc123'));
 		const changesets: NewChangesetWithCommit[] = [
 			{ commit: 'abc123', id: 'cs1', releases: [], summary: '' },
 		];
@@ -87,6 +106,7 @@ describe('getDependencyReleaseLine', () => {
 		const result = await getDependencyReleaseLine(changesets, dependenciesUpdated, {
 			repo: 'org/repo',
 		});
+
 		expect(result).toBe(
 			'- Internal dependencies updated [https://github.com/org/repo/commit/abc123]:\n  - foo@1.2.3\n  - bar@2.0.0',
 		);

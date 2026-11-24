@@ -1,0 +1,49 @@
+catalogMode: strict
+
+catalog:
+  "@changesets/cli": ^3.0.3
+  "@changesets/get-github-info": ^1.0.1
+  "@changesets/types": ^7.0.0
+  "@commitlint/cli": ^21.2.4
+  "@mheob/commitlint-config": ^3.0.0
+  "@mheob/oxfmt-config": ^1.3.3
+  "@mheob/oxlint-config": ^4.1.3
+  # The oldest Node.js the package supports (`engines.node`, tested in CI), so the code uses no newer
+  # API. Development and the other CI jobs run on Node.js 26 (`.node-version`).
+  "@types/node": ^24.19.0
+  # Pinned to the Vitest that vite-plus bundles (see `vitest` below); the coverage provider must match it.
+  "@vitest/coverage-v8": 5.1.0
+  czg: ^1.14.0
+  eslint-plugin-regexp: ^3.3.3
+  # oxfmt and oxlint follow the versions that ship with vite-plus.
+  oxfmt: 0.79.0
+  oxlint: 1.94.0
+  typescript: ^7.0.2
+  vite: npm:@voidzero-dev/vite-plus-core@8.3.8000
+  vite-plus: 1.7.0
+  # Pinned to the Vitest that vite-plus bundles (`vp toolchain vitest`), npm already has a newer one.
+  vitest: 5.1.0
+
+overrides:
+  vite@*: "catalog:"
+  vitest@*: "catalog:"
+
+# Supply-chain protection, all supported by pnpm 12:
+# A dependency's install script runs only when `allowBuilds` lists it; any other fails the install.
+strictDepBuilds: true
+
+# Transitive dependencies come from the registry only, never from Git or tarball URLs.
+blockExoticSubdeps: true
+
+# Refuses a version that is published with less trust than an earlier one (e.g. without provenance).
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  # Pinned by vite-plus 1.7.0. Flagged as a downgrade, but it comes from the same trusted publisher,
+  # repository and release workflow as the versions before it, with provenance.
+  - "tsrs@7.1.0-beta.tsrs2"
+
+# Installs only versions that are at least a day (1440 minutes) old, so a compromised release is
+# usually unpublished before it arrives here. The exceptions are pinned on purpose.
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - "@mheob/*"
