@@ -1,8 +1,8 @@
 {
-	"$schema": "https://unpkg.com/@changesets/config@2.2.0/schema.json",
+	"$schema": "https://unpkg.com/@changesets/config@4.0.1/schema.json",
 	"access": "public",
 	"baseBranch": "main",
-	"changelog": ["../dist/index.js", { "repo": "mheob/changeset-changelog" }],
+	"changelog": ["../dist/index.cjs", { "repo": "mheob/changeset-changelog" }],
 	"commit": false,
 	"fixed": [],
 	"ignore": [],

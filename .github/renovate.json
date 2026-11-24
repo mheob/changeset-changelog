@@ -1,5 +1,23 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["local>mheob/.github:renovate-config"],
-	"schedule": ["before 4am on Wednesday"]
+	"schedule": ["before 4am on Wednesday"],
+	"packageRules": [
+		{
+			"description": "The catalog's vite (an npm: alias of @voidzero-dev/vite-plus-core), vitest and @vitest/coverage-v8 (the coverage provider, same version as vitest) must sit at exactly the versions vite-plus declares in its package.json (dependencies.vite, dependencies.vitest): the vite@* and vitest@* overrides in pnpm-workspace.yaml force the catalog's versions onto vite-plus's own dependencies, so a mismatch installs without an error. The group keeps them in one pull request; CI's check:vite-plus step (scripts/check-vite-plus-versions.ts) fails a pull request that carries only some of them. The alias is matched by its real package name. separateMajorMinor is off because the core's version follows the Vite it carries (8.x) while vite-plus stays on 1.x, so the two would otherwise land in separate pull requests that each fail the check.",
+			"matchPackageNames": [
+				"vite-plus",
+				"@voidzero-dev/vite-plus-core",
+				"vitest",
+				"@vitest/coverage-v8"
+			],
+			"groupName": "vite-plus toolchain",
+			"separateMajorMinor": false
+		},
+		{
+			"description": "oxfmt and oxlint follow the versions that ship with Vite+; they move together with the vite-plus toolchain, not on their own.",
+			"matchPackageNames": ["oxfmt", "oxlint"],
+			"enabled": false
+		}
+	]
 }
