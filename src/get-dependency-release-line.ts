@@ -1,36 +1,38 @@
-import { getInfo } from '@changesets/get-github-info';
+import { getCommitInfo } from '@changesets/get-github-info';
 import type { GetDependencyReleaseLine, NewChangesetWithCommit } from '@changesets/types';
 
-import { errorMessage } from './utils';
+import { getRepository } from './utils';
 
 export async function getDependencyReleaseLinks(
-	changesets: NewChangesetWithCommit[],
+	changesets: readonly Readonly<Pick<NewChangesetWithCommit, 'commit'>>[],
 	repository: string,
 ): Promise<string> {
-	const changesetLinks = await Promise.all(
-		changesets.map(async cs => {
-			// istanbul ignore next: because of our mocked get-github-info -- @preserve
-			if (!cs.commit) return;
-			const { links } = await getInfo({ commit: cs.commit, repo: repository });
-			return links.commit;
+	const commits = changesets.flatMap(({ commit }) =>
+		commit === undefined || commit === '' ? [] : [commit],
+	);
+	const commitLinks = await Promise.all(
+		commits.map(async (commit) => {
+			// `undefined` when GitHub does not know the commit.
+			const info = await getCommitInfo({ commit, repo: repository });
+			return info?.commit.markdownLink;
 		}),
 	);
 
-	return changesetLinks.filter(Boolean).join(', ');
+	return commitLinks.filter((link) => link !== undefined && link !== '').join(', ');
 }
 
 export const getDependencyReleaseLine: GetDependencyReleaseLine = async (
 	changesets,
 	dependenciesUpdated,
-	options,
+	options: Readonly<Record<string, unknown>> | null,
 ) => {
-	if (!options?.repo) throw new Error(errorMessage);
+	const repository = getRepository(options);
 	if (dependenciesUpdated.length === 0) return '';
 
-	const links = await getDependencyReleaseLinks(changesets, options.repo);
+	const links = await getDependencyReleaseLinks(changesets, repository);
 	const headerMessage = `- Internal dependencies updated [${links}]:`;
 	const updatedDependenciesList = dependenciesUpdated.map(
-		dependency => `  - ${dependency.name}@${dependency.newVersion}`,
+		(dependency) => `  - ${dependency.name}@${dependency.newVersion}`,
 	);
 
 	return [headerMessage, ...updatedDependenciesList].join('\n');

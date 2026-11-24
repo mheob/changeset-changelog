@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 
 import { errorMessage } from './utils';
 
-describe('errorMessage', () => {
+describe('the error message', () => {
 	it('should contain the correct instruction', () => {
 		expect(errorMessage).toContain('Please provide a repo to this changelog generator');
 	});
