@@ -23,9 +23,9 @@ interface GithubLinks {
 }
 
 interface GitHubLinksRequest {
-	commit?: MaybeString;
-	commitFromSummary?: MaybeString;
-	prFromSummary?: number | undefined;
+	commit?: string;
+	commitFromSummary?: string;
+	prFromSummary?: number;
 	repository: string;
 }
 
