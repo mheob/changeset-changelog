@@ -31,7 +31,7 @@ Run them from the repository root.
 | Format, lint, types | `vp check` (`vp check --fix` fixes what it can) |
 | Format only | `vp fmt` |
 | Tests (watch mode) | `vp test` |
-| Tests once, with coverage (`coverage/lcov.info`, uploaded to Codecov) | `vp test run --coverage` |
+| Tests once, with coverage (`coverage/lcov.info`, read by Codecov and SonarQube Cloud) | `vp test run --coverage` |
 | One test file | `vp test run src/get-release-line.test.ts` |
 | Build | `vp pack` |
 | Catalog and Vite+ version checks | `pnpm check:catalog`, `pnpm check:vite-plus` |
@@ -45,4 +45,5 @@ A change is done when `vp check` reports 0 errors and 0 warnings, `vp test run` 
 - Commit messages follow Conventional Commits (`@mheob/commitlint-config`).
 - Every change to the published package (`src/`, `package.json`) gets a changeset; Changesets writes `CHANGELOG.md`, which is not formatted by hand.
 - Tests sit next to the code (`*.test.ts`) and mock `@changesets/get-github-info` with `vi.mock(import(…))` and `vi.mocked(…)`.
+- SonarQube Cloud analyzes in CI (`sonar-project.properties`, job `test`), not through Automatic Analysis, which cannot import coverage. The scan needs the repository secret `SONAR_TOKEN` and is skipped without it.
 - Releases: `.github/workflows/release.yml` opens the release pull request and publishes to npm once it is merged. It writes to GitHub with the token of the release GitHub App (variable `BOT_CLIENT_ID`, secret `BOT_PRIVATE_KEY`) and publishes to npm through trusted publishing (OIDC, `id-token: write`, configured on npmjs.com for `release.yml`), without an npm token. The workflow's file name must stay `release.yml`.
